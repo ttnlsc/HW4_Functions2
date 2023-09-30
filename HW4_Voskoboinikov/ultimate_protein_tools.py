@@ -22,6 +22,66 @@ AMINOACID_DICT = {
     }
 
 
+H2O_WEIGHT: float = 18.01468
+
+
+AA_MASS_DICT: dict[str, float] = {
+    'G': 75.0659, 'g': 75.0659,
+    'L': 131.17262, 'l': 131.17262,
+    'Y': 181.18894, 'y': 181.18894,
+    'S': 105.09158, 's': 105.09158,
+    'E': 147.12826, 'e': 147.12826,
+    'Q': 146.1438, 'q': 146.1438,
+    'D': 133.10158, 'd': 133.10158,
+    'N': 132.11712, 'n': 132.11712,
+    'F': 165.18994, 'f': 165.18994,
+    'A': 89.09258, 'a': 89.09258,
+    'K': 146.18716, 'k': 146.18716,
+    'R': 174.20056, 'r': 174.20056,
+    'H': 155.15466, 'h': 155.15466,
+    'C': 121.15758, 'c': 121.15758,
+    'V': 117.14594, 'v': 117.14594,
+    'P': 115.13026, 'p': 115.13026,
+    'W': 204.22648, 'w': 204.22648,
+    'I': 131.17262, 'i': 131.17262,
+    'M': 149.21094, 'm': 149.21094,
+    'T': 119.11826, 't': 119.11826,
+    }
+
+
+ATOMIC_MASS: dict[str, float] = {
+    'C': 12.011,
+    'H': 1.00784,
+    'O': 15.999,
+    'N': 14.0067,
+    'S': 32.065
+    }
+
+
+AA_NAME_DICT: dict[str, str] = {
+    'G': 'Gly', 'g': 'Gly',
+    'L': 'Leu', 'l': 'Leu',
+    'Y': 'Tyr', 'y': 'Tyr',
+    'S': 'Ser', 's': 'Ser',
+    'E': 'Glu', 'e': 'Glu',
+    'Q': 'Gln', 'q': 'Gln',
+    'D': 'Asp', 'd': 'Asp',
+    'N': 'Asn', 'n': 'Asn',
+    'F': 'Phe', 'f': 'Phe',
+    'A': 'Ala', 'a': 'Ala',
+    'K': 'Lys', 'k': 'Lys',
+    'R': 'Arg', 'r': 'Arg',
+    'H': 'His', 'h': 'His',
+    'C': 'Cys', 'c': 'Cys',
+    'V': 'Val', 'v': 'Val',
+    'P': 'Pro', 'p': 'Pro',
+    'W': 'Trp', 'w': 'Trp',
+    'I': 'Ile', 'i': 'Ile',
+    'M': 'Met', 'm': 'Met',
+    'T': 'Thr', 't': 'Thr'
+    }
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
@@ -86,3 +146,109 @@ def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids
     for aa, count in aa_dict_count.items():
         aa_dict_percent[aa] = round(count / len_of_protein * mult, round_var)
     return aa_dict_percent
+
+
+def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = None) -> float:
+    """
+
+    Calculates the molecular mass of a protein based on its amino acid sequence and a dictionary of amino acid masses.
+
+    Arguments / Args:
+    - sequence(str or list): A string or list of characters representing the amino acid sequence.
+    - aa_atomic_mass(dict): A dictionary linking amino acids to their masses in atomic mass units.
+    
+    Return:
+    - float: The molecular mass of a protein in atomic mass units, rounded to the third decimal place.
+    """
+
+    total_mass = 0.0
+    if aa_atomic_mass is None:
+        aa_atomic_mass = AA_MASS_DICT
+
+    for aa in sequence:
+        if aa in aa_atomic_mass:
+            total_mass += aa_atomic_mass[aa]
+        else:
+            raise ValueError(f'Unknown amino acid: {aa}')
+    total_mass = total_mass - H2O_WEIGHT * (len(sequence) - 1)
+
+    return round(total_mass, 3)
+
+
+def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
+    """
+
+    Calculates the molecular mass of a biological molecule, primarily an amino acid, based on a simple chemical formula.
+
+    Arguments / Args:
+    - chem (str): String representing a simple chemical formula, e.g. C2H5OH
+    - atomic_mass (dict[str, float], optional): A dictionary linking the chemical elements Carbon, Hydrogen, Oxygen,
+    Nitrogen, and Sulfur with their masses in atomic mass units.
+
+    Return:
+    - float: Molecular mass of a biological molecule in atomic mass units.
+    """
+
+    total_mass = 0
+    char = 0  # idx init
+    if atomic_mass is None:
+        atomic_mass = ATOMIC_MASS
+    while char < len(chem):
+        if chem[char].isalpha():
+            element = chem[char]
+            char += 1  # очень надо, а то я опять бесконечный цикл сделала
+            if char < len(chem) and chem[char].isdigit():
+                number = ''
+                while char < len(chem) and chem[char].isdigit():
+                    number += chem[char]
+                    char += 1  # очень надо
+                total_mass += atomic_mass[element] * int(number)
+            else:
+                total_mass += atomic_mass[element]
+        else:
+            raise ValueError(f'Unknown elem: {chem[char]}')
+
+    return total_mass
+
+
+def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = '',
+                    use_default_register: bool = True) -> str:
+    """
+
+    Converts a sequence of one-letter amino acid codes to three-letter designations.
+
+    Arguments / Args:
+    - sequence (str): String with one-letter amino acid codes.
+    - name_dict (dict[str, str], optional): A dictionary linking one-letter codes to three-letter designations.
+    If not provided, the standard AA_NAME_DICT dictionary is used.
+    - sep (str, optional): Separator between three-letter amino acid designations. There is no delimiter by default.
+    - use_default_register(bool, optional): Determines whether to preserve letter case in three-letter designations.
+    If True, the letters will be converted to upper or lower case depending on the case of the depending
+    on the case of the one-letter code. The default is False.
+
+    Return:
+    - str: A string of three-letter amino acid designations separated by the specified delimiter.
+    """
+    
+    new_name = ''
+    if name_dict is None:
+        name_dict = AA_NAME_DICT
+    for i, aa in enumerate(sequence):
+        if aa in name_dict:
+            if use_default_register is False:
+                new_name += name_dict[aa]
+            elif use_default_register is True:
+                if aa.isupper():
+                    new_name += name_dict[aa].upper()
+                else:
+                    new_name += name_dict[aa].lower()
+            else:
+                if aa.isupper():
+                    new_name += name_dict[aa].lower()
+                else:
+                    new_name += name_dict[aa].upper()
+            if sep and (i + 1) < len(sequence):
+                new_name += sep
+        else:
+            raise ValueError(f'Unknown amino acid: {aa}')
+    return new_name
