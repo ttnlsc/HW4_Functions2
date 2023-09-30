@@ -48,6 +48,7 @@ AA_MASS_DICT: dict[str, float] = {
     'T': 119.11826, 't': 119.11826,
     }
 
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
@@ -112,3 +113,30 @@ def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids
     for aa, count in aa_dict_count.items():
         aa_dict_percent[aa] = round(count / len_of_protein * mult, round_var)
     return aa_dict_percent
+
+
+def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = None) -> float:
+    """
+
+    Calculates the molecular mass of a protein based on its amino acid sequence and a dictionary of amino acid masses.
+
+    Arguments / Args:
+    - sequence(str or list): A string or list of characters representing the amino acid sequence.
+    - aa_atomic_mass(dict): A dictionary linking amino acids to their masses in atomic mass units.
+    
+    Return:
+    - float: The molecular mass of a protein in atomic mass units, rounded to the third decimal place.
+    """
+    
+    total_mass = 0.0
+    if aa_atomic_mass is None:
+        aa_atomic_mass = AA_MASS_DICT
+
+    for aa in sequence:
+        if aa in aa_atomic_mass:
+            total_mass += aa_atomic_mass[aa]
+        else:
+            raise ValueError(f'Unknown amino acid: {aa}')
+    total_mass = total_mass - H2O_WEIGHT * (len(sequence) - 1)
+
+    return round(total_mass, 3)
