@@ -150,6 +150,13 @@ def get_sites_lengths(sites):
     return sites_length_dct
 
 
+def invert_dct(dct):
+    inv_dct = {}
+    for k, v in dct.items():
+        inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return []) and append key
+    return inv_dct
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
