@@ -107,6 +107,7 @@ RNA_AA_TABLE = {
  'G': ['GGU', 'GGC', 'GGA', 'GGG'],
 }
 
+
 RNA_CODON_TABLE = {
     'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',
     'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',
@@ -125,6 +126,21 @@ RNA_CODON_TABLE = {
     'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
     'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
 }
+
+
+def read_seq_from_fasta(path_to_seq: str, use_full_name=False, **kwargs):
+    with open(path_to_seq) as f:
+        out_dct = {}
+        for line in f:
+            line = line.strip()
+            if line.startswith('>'): # check for first line in seq
+                if use_full_name: # check if user set full name in fasta
+                    name = line[1:] # take whole fasta properties (e.g. if names not unique)
+                else:
+                    name = line[1:].split()[0]
+            else:
+                out_dct[name] = out_dct.get(name, '') + line # get value from dict (return '' if empty) and append str
+    return out_dct
 
 
 def length_of_protein(seq: str) -> int:
