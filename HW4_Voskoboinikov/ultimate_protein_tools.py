@@ -149,3 +149,40 @@ def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = Non
     total_mass = total_mass - H2O_WEIGHT * (len(sequence) - 1)
 
     return round(total_mass, 3)
+
+
+def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
+    """
+
+    Calculates the molecular mass of a biological molecule, primarily an amino acid, based on a simple chemical formula.
+
+    Arguments / Args:
+    - chem (str): String representing a simple chemical formula, e.g. C2H5OH
+    - atomic_mass (dict[str, float], optional): A dictionary linking the chemical elements Carbon, Hydrogen, Oxygen,
+    Nitrogen, and Sulfur with their masses in atomic mass units.
+
+    Return:
+    - float: Molecular mass of a biological molecule in atomic mass units.
+    """
+    
+    total_mass = 0
+    char = 0  # idx init
+    if atomic_mass is None:
+        atomic_mass = ATOMIC_MASS
+    while char < len(chem):
+        if chem[char].isalpha():
+            element = chem[char]
+            char += 1  # очень надо, а то я опять бесконечный цикл сделала
+            if char < len(chem) and chem[char].isdigit():
+                number = ''
+                while char < len(chem) and chem[char].isdigit():
+                    number += chem[char]
+                    char += 1  # очень надо
+                total_mass += atomic_mass[element] * int(number)
+            else:
+                total_mass += atomic_mass[element]
+        else:
+            raise ValueError(f'Unknown elem: {chem[char]}')
+
+    return total_mass
+
