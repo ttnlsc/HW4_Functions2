@@ -66,7 +66,7 @@ TODO change this
 If the program doesn't work – try to scream like opossum.
 
 ### Contacts
-![Wonderful Team](https://github.com/ArtemVaska/HW4_Functions2/tree/HW4_Voskoboinikov/HW4_Voskoboinikov/Wonderful_Team.jpg)
+![Wonderful Team](https://github.com/ArtemVaska/HW4_Functions2/blob/HW4_Vasilev/HW4_Voskoboinikov/Wonderful_team.jpg)
 
 Aleksandr Voskoboinikov – Team Leader (wwoskie@gmail.com)
 
