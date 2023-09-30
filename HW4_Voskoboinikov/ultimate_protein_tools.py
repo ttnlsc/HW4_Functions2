@@ -143,6 +143,13 @@ def read_seq_from_fasta(path_to_seq: str, use_full_name=False, **kwargs):
     return out_dct
 
 
+def get_sites_lengths(sites):
+    sites_length_dct = {}
+    for site in sites:
+        sites_length_dct[site] = len(site)
+    return sites_length_dct
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
