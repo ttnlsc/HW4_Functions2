@@ -157,6 +157,21 @@ def invert_dct(dct):
     return inv_dct
 
 
+def find_sites(seq, *sites, is_one_based = False, **kwargs):
+    window_sizes = invert_dct(get_sites_lengths(sites)) # get lengths of all sites and stick them together to avoid passing through seq multiple times if possible
+    found_sites = {} 
+    for window_size in window_sizes: # perform iteration for all given lengths of sites
+        for i in range(len(seq) - window_size + 1): # iterate through seq with step one and consider window of site length each iteration 
+            scatter = seq[i:i + window_size] # get fragment of sequence with length of window i.e. scatter
+            for site in window_sizes[window_size]:
+                if scatter == site: # check if scatter is site
+                    found_sites[site] = (
+                        found_sites.get(site, []) # get 
+                        + [i + is_one_based]
+                        ) # append index to list in dict
+    return found_sites
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
