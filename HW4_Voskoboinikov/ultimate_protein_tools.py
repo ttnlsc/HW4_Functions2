@@ -49,6 +49,15 @@ AA_MASS_DICT: dict[str, float] = {
     }
 
 
+ATOMIC_MASS: dict[str, float] = {
+    'C': 12.011,
+    'H': 1.00784,
+    'O': 15.999,
+    'N': 14.0067,
+    'S': 32.065
+}
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
@@ -127,7 +136,7 @@ def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = Non
     Return:
     - float: The molecular mass of a protein in atomic mass units, rounded to the third decimal place.
     """
-    
+
     total_mass = 0.0
     if aa_atomic_mass is None:
         aa_atomic_mass = AA_MASS_DICT
