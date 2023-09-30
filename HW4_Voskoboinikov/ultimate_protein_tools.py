@@ -55,7 +55,7 @@ ATOMIC_MASS: dict[str, float] = {
     'O': 15.999,
     'N': 14.0067,
     'S': 32.065
-}
+    }
 
 
 AA_NAME_DICT: dict[str, str] = {
@@ -210,3 +210,45 @@ def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
 
     return total_mass
 
+
+def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = '',
+                    use_default_register: bool = True) -> str:
+    """
+
+    Converts a sequence of one-letter amino acid codes to three-letter designations.
+
+    Arguments / Args:
+    - sequence (str): String with one-letter amino acid codes.
+    - name_dict (dict[str, str], optional): A dictionary linking one-letter codes to three-letter designations.
+    If not provided, the standard AA_NAME_DICT dictionary is used.
+    - sep (str, optional): Separator between three-letter amino acid designations. There is no delimiter by default.
+    - use_default_register(bool, optional): Determines whether to preserve letter case in three-letter designations.
+    If True, the letters will be converted to upper or lower case depending on the case of the depending
+    on the case of the one-letter code. The default is False.
+
+    Return:
+    - str: A string of three-letter amino acid designations separated by the specified delimiter.
+    """
+    
+    new_name = ''
+    if name_dict is None:
+        name_dict = AA_NAME_DICT
+    for i, aa in enumerate(sequence):
+        if aa in name_dict:
+            if use_default_register is False:
+                new_name += name_dict[aa]
+            elif use_default_register is True:
+                if aa.isupper():
+                    new_name += name_dict[aa].upper()
+                else:
+                    new_name += name_dict[aa].lower()
+            else:
+                if aa.isupper():
+                    new_name += name_dict[aa].lower()
+                else:
+                    new_name += name_dict[aa].upper()
+            if sep and (i + 1) < len(sequence):
+                new_name += sep
+        else:
+            raise ValueError(f'Unknown amino acid: {aa}')
+    return new_name
