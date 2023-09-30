@@ -20,3 +20,17 @@ AMINOACID_DICT = {
     'W': 'Tryptophan', 'w': 'tryptophan',
     'Y': 'Tyrosine', 'y': 'tyrosine'
     }
+
+
+def length_of_protein(seq: str) -> int:
+    """
+    Calculates the length of a protein.
+
+    Argument:
+    - seq (str): sequence to calculate the length
+
+    Return:
+    - int: sequence length
+    """
+
+    return len(seq)
