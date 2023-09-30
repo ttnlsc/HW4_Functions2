@@ -58,6 +58,30 @@ ATOMIC_MASS: dict[str, float] = {
 }
 
 
+AA_NAME_DICT: dict[str, str] = {
+    'G': 'Gly', 'g': 'Gly',
+    'L': 'Leu', 'l': 'Leu',
+    'Y': 'Tyr', 'y': 'Tyr',
+    'S': 'Ser', 's': 'Ser',
+    'E': 'Glu', 'e': 'Glu',
+    'Q': 'Gln', 'q': 'Gln',
+    'D': 'Asp', 'd': 'Asp',
+    'N': 'Asn', 'n': 'Asn',
+    'F': 'Phe', 'f': 'Phe',
+    'A': 'Ala', 'a': 'Ala',
+    'K': 'Lys', 'k': 'Lys',
+    'R': 'Arg', 'r': 'Arg',
+    'H': 'His', 'h': 'His',
+    'C': 'Cys', 'c': 'Cys',
+    'V': 'Val', 'v': 'Val',
+    'P': 'Pro', 'p': 'Pro',
+    'W': 'Trp', 'w': 'Trp',
+    'I': 'Ile', 'i': 'Ile',
+    'M': 'Met', 'm': 'Met',
+    'T': 'Thr', 't': 'Thr'
+    }
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
@@ -164,7 +188,7 @@ def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
     Return:
     - float: Molecular mass of a biological molecule in atomic mass units.
     """
-    
+
     total_mass = 0
     char = 0  # idx init
     if atomic_mass is None:
