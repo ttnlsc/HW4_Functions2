@@ -82,6 +82,32 @@ AA_NAME_DICT: dict[str, str] = {
     }
 
 
+# TODO check if possible to rempve kwargs
+RNA_AA_TABLE = {
+'F': ['UUU', 'UUC'],
+ 'L': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
+ 'S': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'],
+ 'Y': ['UAU', 'UAC'],
+ '*': ['UAA', 'UAG', 'UGA'],
+ 'C': ['UGU', 'UGC'],
+ 'W': ['UGG'],
+ 'P': ['CCU', 'CCC', 'CCA', 'CCG'],
+ 'H': ['CAU', 'CAC'],
+ 'Q': ['CAA', 'CAG'],
+ 'R': ['CGU', 'CGC', 'CGA', 'CGG', 'AGA', 'AGG'],
+ 'I': ['AUU', 'AUC', 'AUA'],
+ 'M': ['AUG'],
+ 'T': ['ACU', 'ACC', 'ACA', 'ACG'],
+ 'N': ['AAU', 'AAC'],
+ 'K': ['AAA', 'AAG'],
+ 'V': ['GUU', 'GUC', 'GUA', 'GUG'],
+ 'A': ['GCU', 'GCC', 'GCA', 'GCG'],
+ 'D': ['GAU', 'GAC'],
+ 'E': ['GAA', 'GAG'],
+ 'G': ['GGU', 'GGC', 'GGA', 'GGG'],
+}
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
