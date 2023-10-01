@@ -140,7 +140,7 @@ def read_seq_from_fasta(path_to_seq: str,
     Return:
     - dict: dict of sequences names as keys and sequences themselves as values {'seq_name': 'sequence',}
     """
-    
+
     with open(path_to_seq) as f:
         out_dct = {}
         for line in f:
@@ -172,7 +172,16 @@ def get_sites_lengths(sites: list) -> dict:
     return sites_length_dct
 
 
-def invert_dct(dct):
+def invert_dct(dct: dict) -> dict:
+    """
+    Inverts a dict
+
+    Argument:
+    - dct (dict): dict to be inverted
+
+    Return:
+    - dict: inverted dict
+    """
     inv_dct = {}
     for k, v in dct.items():
         inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return []) and append key
