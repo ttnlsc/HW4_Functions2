@@ -474,7 +474,7 @@ def get_frameshift_proteins(seq: int,
     return "You don't fucking know what you're doing!"  # politely ask user to reconsider their actions
 
 
-def length_of_protein(seq: str, **_) -> int:
+def get_length_of_protein(seq: str, **_) -> int:
     """
     Calculates the length of a protein.
 
@@ -649,9 +649,12 @@ command_dct = {
     'get_protein_rnas_number': get_protein_rnas_number,
     'get_frameshift_proteins': get_frameshift_proteins,
     'is_protein_valid': is_protein_valid,
-    'length_of_protein': length_of_protein,
+    'get_length_of_protein': get_length_of_protein,
     'count_aa': count_aa,
     'get_fracture_of_aa': get_fracture_of_aa,
+    'calculate_protein_mass': calculate_protein_mass,
+    'get_atomic_mass': get_atomic_mass,
+    'convert_aa_name': convert_aa_name,
     }
 
 
@@ -687,11 +690,26 @@ def run_ultimate_protein_tools(command,
                                inp,
                                *args,
                                **kwargs):
+    """
+    Accepts command and runs it on input data with params
+
+    Arguments:
+    - command (str): Valid command from command_dct
+    - inp (str): Input in form of path, seq, seq list or seq dct
+
+    Return:
+    - output_dct (dict): dict where keys are number or name of seq and values are results of command run
+    """
     output_dct = {}
     input_dct = parse_input(inp)
     for name in input_dct:
-        if is_protein_valid(input_dct[name]):
+        if command in command_dct and command != 'get_atomic_mass':
+            if is_protein_valid(input_dct[name]):
+                output_dct[name] = command_dct[command](input_dct[name], *args, **kwargs)
+            else:
+                output_dct[name] = is_protein_valid(input_dct[name])
+        elif command == 'get_atomic_mass':
             output_dct[name] = command_dct[command](input_dct[name], *args, **kwargs)
         else:
-            output_dct[name] = is_protein_valid(input_dct[name])
+            print('Command invalid')
     return output_dct
