@@ -28,7 +28,9 @@ ATOMIC_MASS = {
     'H': 1.00784,
     'O': 15.999,
     'N': 14.0067,
-    'S': 32.065
+    'S': 32.065,
+    'Fe':55.845,
+    'Se':78,96
 }
 
 AA_NAME_DICT = {
@@ -554,25 +556,36 @@ def get_atomic_mass(chem: str, atomic_mass: dict = None) -> float:
     """
 
     total_mass = 0
-    char = 0  # idx init
-    if atomic_mass is None:
-        atomic_mass = ATOMIC_MASS
-    while char < len(chem):
-        if chem[char].isalpha():
-            element = chem[char]
-            char += 1  # очень надо, а то я опять бесконечный цикл сделала
-            if char < len(chem) and chem[char].isdigit():
-                number = ''
-                while char < len(chem) and chem[char].isdigit():
-                    number += chem[char]
-                    char += 1  # очень надо
-                total_mass += atomic_mass[element] * int(number)
+    element = ''
+    number = ''
+    
+    for char in chem:
+        if char.isalpha():
+            if char.isupper():
+                if element and number:
+                    total_mass += ATOMIC_MASS[element] * int(number)
+                    number = ''
+                    element = ''
+                    element += char
+                elif element:
+                    total_mass += ATOMIC_MASS[element]
+                    element = ''
+                    element += char
+                else:
+                    element += char
             else:
-                total_mass += atomic_mass[element]
+                element += char
+        elif char.isdigit():
+            number += char
         else:
-            raise ValueError(f'Unknown elem: {chem[char]}')
+            raise ValueError(f'Unexpected character: {char}')
 
-    return total_mass
+    if element and number:
+        total_mass += ATOMIC_MASS[element] * int(number)
+    elif element:
+        total_mass += ATOMIC_MASS[element]
+
+    return round(total_mass, 3)
 
 
 def convert_aa_name(sequence: str, name_dict: dict = None, sep: str = '',
