@@ -402,13 +402,31 @@ def get_protein_rnas_number(seq: int) -> int:
     - seq (str): seq to be checked
 
     Return:
-    - int: number of possible RNA's for seq
+    - rnas_num (int): number of possible RNA's for seq
     """
 
     rnas_num = 1
     for amino_acid in seq:
         rnas_num *= len(RNA_AA_TABLE[amino_acid])
     return rnas_num
+
+
+def check_all_upper(codon: str) -> bool:
+    """
+    Checks whether all letters in colon are upper
+
+    Arguments:
+    - codon (str): codon to be checked
+
+    Return:
+    - check_upper (bool): if all letters are uppercase
+    """
+
+    check_upper = True
+    for letter in (set(codon)):
+        letter.isupper() and check_upper
+    return check_upper
+
 
 
 def get_frameshift_proteins(seq: int, 
@@ -436,6 +454,8 @@ def get_frameshift_proteins(seq: int,
                 frame = ''
                 for i in range(frame_number, len(rna) - (frame_number + 1), 3): # set frame-dependent range to iterate
                     frame_codon = rna[i:i+3] # extract codon
+                    if not check_all_upper(frame_codon): # check if all letters in codon uppercase
+                        frame_codon = frame_codon.tolower() # if not change all to lowercase
                     frame += RNA_CODON_TABLE[frame_codon]
                     if is_stop_codon_termination_enabled and RNA_CODON_TABLE[frame_codon] == '*': # stop writing if meet stop-codon
                         break
