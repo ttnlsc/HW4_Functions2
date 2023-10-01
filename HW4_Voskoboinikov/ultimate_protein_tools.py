@@ -23,7 +23,7 @@ AMINOACID_DICT = {
 
 H2O_WEIGHT: float = 18.01468
 
-AA_MASS_DICT: dict[str, float] = {
+AA_MASS_DICT = {
     'G': 75.0659, 'g': 75.0659,
     'L': 131.17262, 'l': 131.17262,
     'Y': 181.18894, 'y': 181.18894,
@@ -46,7 +46,7 @@ AA_MASS_DICT: dict[str, float] = {
     'T': 119.11826, 't': 119.11826,
 }
 
-ATOMIC_MASS: dict[str, float] = {
+ATOMIC_MASS = {
     'C': 12.011,
     'H': 1.00784,
     'O': 15.999,
@@ -54,7 +54,7 @@ ATOMIC_MASS: dict[str, float] = {
     'S': 32.065
 }
 
-AA_NAME_DICT: dict[str, str] = {
+AA_NAME_DICT = {
     'G': 'Gly', 'g': 'Gly',
     'L': 'Leu', 'l': 'Leu',
     'Y': 'Tyr', 'y': 'Tyr',
@@ -540,7 +540,7 @@ def get_fracture_of_aa(seq: str, show_as_percentage: bool = False, aminoacids: s
     return aa_dict_percent
 
 
-def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = None) -> float:
+def calculate_protein_mass(sequence: str, aa_atomic_mass: dict = None) -> float:
     """
     Calculates the molecular mass of a protein based on its amino acid sequence and a dictionary of amino acid masses.
 
@@ -566,7 +566,7 @@ def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = Non
     return round(total_mass, 3)
 
 
-def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
+def get_atomic_mass(chem: str, atomic_mass: dict = None) -> float:
     """
     Calculates the molecular mass of a biological molecule, primarily an amino acid, based on a simple chemical formula.
 
@@ -601,7 +601,7 @@ def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
     return total_mass
 
 
-def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = '',
+def convert_aa_name(sequence: str, name_dict: dict = None, sep: str = '',
                     use_default_register: bool = True) -> str:
     """
     Converts a sequence of one-letter amino acid codes to three-letter designations.
