@@ -224,7 +224,7 @@ def find_sites(seq: str,
     window_sizes = invert_dct(get_sites_lengths(sites)) # get lengths of all sites and stick them together to avoid passing through seq multiple times if possible
     found_sites = {} 
     for window_size in window_sizes: # perform iteration for all given lengths of sites
-        for i in range(len(seq) - window_size + 1): # iterate through seq with step one and consider window of site length each iteration 
+        for i in range(len(seq) - window_size + 1): # iterate through seq with step one and consider window of site length each step 
             scatter = seq[i:i + window_size] # get fragment of sequence with length of window i.e. scatter
             for site in window_sizes[window_size]:
                 if scatter == site: # check if scatter is site
@@ -235,8 +235,20 @@ def find_sites(seq: str,
     return found_sites
 
 
-def get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = False):
-    if i_absolutely_fucking_know_what_im_doing:
+def get_protein_rnas(seq: str,
+                     check_if_user_conscious: bool = False) -> list:
+    """
+    Returns list of all possible RNA's from which can serve as matrix for protein synthesis. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
+
+    Argument:
+    - seq (str): seq to be checked
+    - check_if_user_conscious (bool): checks user's consciousness. Default False
+
+    Return:
+    - list: list of possible RNA's as str
+    """
+
+    if check_if_user_conscious:
         kmers = [''] # set initial kmers
         for amino_acid in seq: # iterate AAs
             current_kmers = []
@@ -248,7 +260,7 @@ def get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = False):
 
         return kmers
 
-    return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
+    return "You don't know what you're doing!" # politely ask user to reconsider their actions
 
 
 def get_protein_rnas_number(seq):
@@ -258,10 +270,10 @@ def get_protein_rnas_number(seq):
     return rnas_num
 
 
-def get_frameshift_proteins(seq, i_absolutely_fucking_know_what_im_doing = False, is_stop_codon_termination_enabled=False):
-    if i_absolutely_fucking_know_what_im_doing:
+def get_frameshift_proteins(seq, check_if_user_conscious = False, is_stop_codon_termination_enabled=False):
+    if check_if_user_conscious:
         frameshift_dct = {'frame_0': [seq]} # set current seq as frame_0 (protein from not-shifted frame)
-        rnas = get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = i_absolutely_fucking_know_what_im_doing)
+        rnas = get_protein_rnas(seq, check_if_user_conscious = check_if_user_conscious)
         for frame_number in [1, 2]:
             frames_list = []
             for rna in rnas:
