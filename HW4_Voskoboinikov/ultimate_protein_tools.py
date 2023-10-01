@@ -130,7 +130,7 @@ RNA_CODON_TABLE = {
 
 def read_seq_from_fasta(path_to_seq: str, 
                         use_full_name: bool = False, 
-                        **kwargs) -> dict:
+                        **_) -> dict:
     """
     Reads sequences from fasta file and returns dictionary
 
@@ -185,7 +185,7 @@ def invert_dct(dct: dict) -> dict:
 
     inv_dct = {}
     for k, v in dct.items():
-        inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return []) and append key
+        inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return [] if empty) and append key
     return inv_dct
 
 
@@ -208,7 +208,7 @@ def is_protein_valid(seq: str) -> bool:
 def find_sites(seq: str, 
                *sites: str, 
                is_one_based: bool = False, 
-               **kwargs) -> dict:
+               **_) -> dict:
     """
     Finds indexes of given sites
 
@@ -282,7 +282,8 @@ def get_protein_rnas_number(seq: int) -> int:
 
 def get_frameshift_proteins(seq: int, 
                             check_if_user_conscious: bool = False, 
-                            is_stop_codon_termination_enabled: bool = False) -> dict:
+                            is_stop_codon_termination_enabled: bool = False,
+                            **_) -> dict:
     """
     Returns list of all possible proteins from all possible frames in peptide. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
     
@@ -494,22 +495,40 @@ COMMAND_DCT = {
     }
 
 
+def parse_input(inp: str, **kwargs) -> dict:
+    """
+    Parses input and returns dict of seqs
+
+    Arguments:
+    - inp (str): Input path or seq or dict of seqs or list of seqs
+    - **kwargs: Additional keyword arguments to be passed to input reader (e.g. )
+
+    Return:
+    - parsed_dct (dict): dict where keys are number or name of seq and value of seq
+    """
+    parsed_dct = {}
+    inp_type = type(inp)
+    if inp_type == list:
+        for i, seq in enumerate(inp):
+            parsed_dct |= {i: seq}
+    elif inp_type == dict:
+        parsed_dct = inp
+    elif inp_type == str and '.' in inp:
+        parsed_dct = input_dct = read_seq_from_fasta(inp, **kwargs)
+    elif inp_type == str:
+        parsed_dct = {0: inp}
+    
+    return parsed_dct
+
+
+
+
 def run_ultimate_protein_tools(command,
+                               inp,
                                *args,
-                               input_path = None,
-                               input_seq = None,
-                               input_lst = None,
-                               input_dct = None,
                                **kwargs):
     output_dct = {}
-    if input_path:
-        input_dct = read_seq_from_fasta(input_path, **kwargs)
-    elif input_seq: # TODO possible name parsing
-        input_dct= {0: input_seq}
-    elif input_lst:
-        input_dct = {}
-        for i, seq in enumerate(input_lst):
-            input_dct |= {i: seq}
+    input_dct = parse_input(inp)
     for name in input_dct:
         if is_protein_valid(input_dct[name]):
             output_dct[name] = COMMAND_DCT[command](input_dct[name], *args, **kwargs)
