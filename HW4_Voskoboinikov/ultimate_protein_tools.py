@@ -188,6 +188,13 @@ def get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = False):
     return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
 
 
+def get_protein_rnas_number(seq):
+    rnas_num = 1
+    for amino_acid in seq:
+        rnas_num *= len(RNA_AA_TABLE[amino_acid])
+    return rnas_num
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
