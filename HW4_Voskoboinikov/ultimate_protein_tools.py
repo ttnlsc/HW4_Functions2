@@ -474,7 +474,7 @@ def get_frameshift_proteins(seq: int,
     return "You don't fucking know what you're doing!"  # politely ask user to reconsider their actions
 
 
-def length_of_protein(seq: str) -> int:
+def get_length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
 
@@ -515,7 +515,7 @@ def count_aa(seq: str, *, aminoacids: str = None) -> dict:
 
 def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids: str = None) -> dict:
     """
-    Returns the fracture or percentage of amino acids in a protein sequence.
+    Calculates the fracture or percentage of amino acids in a protein sequence.
 
     Arguments:
     - seq (str): sequence in which you need to calculate the fracture of amino acids
@@ -534,7 +534,7 @@ def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids
         round_var = 4
     aa_dict_count = count_aa(seq, aminoacids=aminoacids)
     aa_dict_percent = {}
-    len_of_protein = length_of_protein(seq)
+    len_of_protein = get_length_of_protein(seq)
     for aa, count in aa_dict_count.items():
         aa_dict_percent[aa] = round(count / len_of_protein * mult, round_var)
     return aa_dict_percent
@@ -544,7 +544,7 @@ def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = Non
     """
     Calculates the molecular mass of a protein based on its amino acid sequence and a dictionary of amino acid masses.
 
-    Arguments / Args:
+    Arguments:
     - sequence(str or list): A string or list of characters representing the amino acid sequence.
     - aa_atomic_mass(dict): A dictionary linking amino acids to their masses in atomic mass units.
     
@@ -570,7 +570,7 @@ def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
     """
     Calculates the molecular mass of a biological molecule, primarily an amino acid, based on a simple chemical formula.
 
-    Arguments / Args:
+    Arguments:
     - chem (str): String representing a simple chemical formula, e.g. C2H5OH
     - atomic_mass (dict[str, float], optional): A dictionary linking the chemical elements Carbon, Hydrogen, Oxygen,
     Nitrogen, and Sulfur with their masses in atomic mass units.
@@ -606,7 +606,7 @@ def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = 
     """
     Converts a sequence of one-letter amino acid codes to three-letter designations.
 
-    Arguments / Args:
+    Arguments:
     - sequence (str): String with one-letter amino acid codes.
     - name_dict (dict[str, str], optional): A dictionary linking one-letter codes to three-letter designations.
     If not provided, the standard AA_NAME_DICT dictionary is used.
