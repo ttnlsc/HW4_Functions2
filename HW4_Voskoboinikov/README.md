@@ -14,15 +14,7 @@ Make sure the path to the directory with `ultimate_protein_tools.py` is added to
 
 ### Usage
 
-To run the script, just call it from the directory where the program is located:
-
-```
-python ultimate_protein_tools.py
-```
-
-To exit the program, type `exit` in the console.
-
-While running the program, you can use next arguments for ***run_ultimate_protein_tools*** function (next – *main function*):
+You can use next arguments for ***run_ultimate_protein_tools*** function:
 
 1. `read_seq_from_fasta`: Reads sequences from fasta file and returns dictionary.
     
@@ -136,32 +128,165 @@ While running the program, you can use next arguments for ***run_ultimate_protei
 
 ### Input of data
 
-During each run of the main function, the user is required to enter a **protein sequence / sequences** that must be processed using the procedures listed above.
+During each run of the main function, the user is required to enter a **protein sequence / sequences / fasta-file** that must be processed using the procedures listed above.
 
 The program involves the analysis of protein sequences consisting of <u>**20 canonical amino acids**</u>.
 
 If the data is entered incorrectly, an appropriate error will be displayed.
 
 ```python
-run_ultimate_protein_tools('AZAZA', get_length_of_protein) -> ValueError #TODO add error message
+run_ultimate_protein_tools('AZAZA', get_length_of_protein)
+False
 ```
 
 ### Examples
 
 ```python
-run_ultimate_protein_tools('MAGDVLAGTTTSDRAAGALGTLGTAATLRAATDGLLQR', get_length_of_protein) -> 38
-run_ultimate_protein_tools('MAGDVLAGTTTSDRAAGALGTLGTAATLRAATDGLLQR', aminoacids='AT', count_aa) -> {'A': 9, 'T': 7}
-run_ultimate_protein_tools('MAGDVLAGTTTSDRAAGALGTLGTAATLRAATDGLLQR', aminoacids='L', get_fracture_of_aa) -> {'L': 0.1579}
-run_ultimate_protein_tools('MAGDVLAGTTTSDRAAGALGTLGTAATLRAATDGLLQR', aminoacids='DRG', get_fracture_of_aa, show_as_percentage=True) -> {'D': 7.89, 'R': 7.89, 'G': 15.79}
+read_seq_from_fasta('/content/testdata.fasta', use_full_name=True)
 
-#TODO examples for other functions
+{'crab_anapl ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDITIHNPLIRRPLFSWLAPSRIFDQIFGEHLQESELLPASPSLSPFLMRSPIFRMPSWLETGLSEMRLEKDKFSVNLDVKHFSPEELKVKVLGDMVEIHGKHEERQDEHGFIAREFNRKYRIPADVDPLTITSSLSLDGVLTVSAPRKQSDVPERSIPITREEKPAIAGAQRK',
+ 'crab_bovin ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFPASTSLSPFYLRPPSFLRAPSWIDTGLSEMRLEKDRFSVNLDVKHFSPEELKVKVLGDVIEVHGKHEERQDEHGFISREFHRKYRIPADVDPLAITSSLSSDGVLTVNGPRKQASGPERTIPITREEKPAVTAAPKK',
+ 'crab_chick ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDITIHNPLVRRPLFSWLTPSRIFDQIFGEHLQESELLPTSPSLSPFLMRSPFFRMPSWLETGLSEMRLEKDKFSVNLDVKHFSPEELKVKVLGDMIEIHGKHEERQDEHGFIAREFSRKYRIPADVDPLTITSSLSLDGVLTVSAPRKQSDVPERSIPITREEKPAIAGSQRK',
+ 'crab_human ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFPTSTSLSPFYLRPPSFLRAPSWFDTGLSEMRLEKDRFSVNLDVKHFSPEELKVKVLGDVIEVHGKHEERQDEHGFISREFHRKYRIPADVDPLTITSSLSSDGVLTVNGPRKQVSGPERTIPITREEKPAVTAAPKK',
+ 'crab_mesau ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFSTATSLSPFYLRPPSFLRAPSWIDTGLSEMRMEKDRFSVNLDVKHFSPEELKVKVLGDVVEVHGKHEERQDEHGFISREFHRKYRIPADVDPLTITSSLSSDGVLTVNGPRKQASGPERTIPITREEKPAVTAAPKK',
+ 'crab_mouse ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN) (P23).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFSTATSLSPFYLRPPSFLRAPSWIDTGLSEMRLEKDRFSVNLDVKHFSPEELKVKVLGDVIEVHGKHEERQDEHGFISREFHRKYRIPADVDPLAITSSLSSDGVLTVNGPRKQVSGPERTIPITREEKPAVAAAPKK',
+ 'crab_rabit ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFPTSTSLSPFYLRPPSFLRAPSWIDTGLSEMRLEKDRFSVNLDVKHFSPEELKVKVLGDVIEVHGKHEERQDEHGFISREFHRKYRIPADVDPLTITSSLSSDGVLTVNGPRKQAPGPERTIPITREEKPAVTAAPKK',
+ 'crab_rat ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIHHPWIRRPFFPFHSPSRLFDQFFGEHLLESDLFSTATSLSPFYLRPPSFLRAPSWIDTGLSEMRMEKDRFSVNLDVKHFSPEELKVKVLGDVIEVHGKHEERQDEHGFISREFHRKYRIPADVDPLTITSSLSSDGVLTVNGPRKQASGPERTIPITREEKPAVTAAPKK',
+ 'crab_squac ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 'MDIAIQHPWLRRPLFPSSIFPSRIFDQNFGEHFDPDLFPSFSSMLSPFYWRMGAPMARMPSWAQTGLSELRLDKDKFAIHLDVKHFTPEELRVKILGDFIEVQAQHEERQDEHGYVSREFHRKYKVPAGVDPLVITCSLSADGVLTITGPRKVADVPERSVPISRDEKPAVAGPQQK'}
+
+find_sites('FSWLTPSRIFDQIFGEHLQESELLPTSPSLSPFLMRSPFFRMPSWLETGLS', 'M')
+{'M': [34, 41]}
+
+run_ultimate_protein_tools('find_sites', '/content/testdata.fasta', 'M')
+{'crab_anapl': {'M': [0, 48, 55, 66, 95]},
+ 'crab_bovin': {'M': [0, 67]},
+ 'crab_chick': {'M': [0, 48, 55, 66, 95]},
+ 'crab_human': {'M': [0, 67]},
+ 'crab_mesau': {'M': [0, 67, 69]},
+ 'crab_mouse': {'M': [0, 67]},
+ 'crab_rabit': {'M': [0, 67]},
+ 'crab_rat': {'M': [0, 67, 69]},
+ 'crab_squac': {'M': [0, 43, 51, 55, 58]}}
+
+run_ultimate_protein_tools('find_sites', 'FSWLTPSRIFDQIFGEHLQESELLPTSPSLSPFLMRSPFFRMPSWLETGLS', 'M')
+{'M': [34, 41]}
+
+run_ultimate_protein_tools('get_protein_rnas', 'NnnN', check_if_user_conscious=True, use_full_name=True)
+['AAUaauaauAAU',
+ 'AACaauaauAAU',
+ 'AAUaacaauAAU',
+ 'AACaacaauAAU',
+ 'AAUaauaacAAU',
+ 'AACaauaacAAU',
+ 'AAUaacaacAAU',
+ 'AACaacaacAAU',
+ 'AAUaauaauAAC',
+ 'AACaauaauAAC',
+ 'AAUaacaauAAC',
+ 'AACaacaauAAC',
+ 'AAUaauaacAAC',
+ 'AACaauaacAAC',
+ 'AAUaacaacAAC',
+ 'AACaacaacAAC']
+
+run_ultimate_protein_tools('get_protein_rnas', 'NnnN', use_full_name=True)
+'You don't know what you're doing!'
+
+run_ultimate_protein_tools('get_protein_rnas_number', '/content/testdata.fasta', use_full_name=True)
+{'crab_anapl ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 306539842376921568815733271183477097188669192775870536614881550927197241900538112709230592,
+ 'crab_bovin ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 3444683660839151566170764002105685020808749008532141887447338361036488073592878215794262016,
+ 'crab_chick ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 919619527130764706447199813550431291566007578327611609844644652781591725701614338127691776,
+ 'crab_human ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 2296455773892767710780509334737123347205832672354761258298225574024325382395252143862841344,
+ 'crab_mesau ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 765485257964255903593503111579041115735277557451587086099408524674775127465084047954280448,
+ 'crab_mouse ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN) (P23).': 3444683660839151566170764002105685020808749008532141887447338361036488073592878215794262016,
+ 'crab_rabit ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 2296455773892767710780509334737123347205832672354761258298225574024325382395252143862841344,
+ 'crab_rat ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 574113943473191927695127333684280836801458168088690314574556393506081345598813035965710336,
+ 'crab_squac ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': 9450435283509332143129668044185692786855278487056630692585290428083643548951654913015808}
+
+run_ultimate_protein_tools('get_frameshift_proteins', 'NnnN', check_if_user_conscious=True)
+{'frame_0': ['NnnN'],
+ 'frame_1': ['iit', 'tii', 'tti', 'iti', 'tit', 'itt', 'ttt', 'iii'],
+ 'frame_2': ['**q', '*qq', '***', '*q*', 'q**', 'qqq', 'qq*', 'q*q']}
+
+run_ultimate_protein_tools('get_frameshift_proteins', 'NnnN', check_if_user_conscious=True, is_stop_codon_termination_enabled=True)
+{0: {'frame_0': ['NnnN'],
+  'frame_1': ['iit', 'tii', 'tti', 'iti', 'tit', 'itt', 'ttt', 'iii'],
+  'frame_2': ['qqq', '*', 'q*', 'qq*']}}
+
+run_ultimate_protein_tools('get_length_of_protein', '/content/testdata.fasta')
+{'crab_anapl': 174,
+ 'crab_bovin': 175,
+ 'crab_chick': 174,
+ 'crab_human': 175,
+ 'crab_mesau': 175,
+ 'crab_mouse': 175,
+ 'crab_rabit': 175,
+ 'crab_rat': 175,
+ 'crab_squac': 177}
+
+run_ultimate_protein_tools('count_aa', '/content/testdata.fasta', 'MLK', use_full_name=True)
+{'crab_anapl ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 5,
+  'L': 18,
+  'K': 10},
+ 'crab_bovin ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 2,
+  'L': 15,
+  'K': 10},
+ 'crab_chick ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 5,
+  'L': 18,
+  'K': 10},
+ 'crab_human ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 2,
+  'L': 15,
+  'K': 10},
+ 'crab_mesau ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 3,
+  'L': 14,
+  'K': 10},
+ 'crab_mouse ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN) (P23).': {'M': 2,
+  'L': 15,
+  'K': 10},
+ 'crab_rabit ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 2,
+  'L': 15,
+  'K': 10},
+ 'crab_rat ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 3,
+  'L': 14,
+  'K': 10},
+ 'crab_squac ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).': {'M': 5,
+  'L': 13,
+  'K': 9}}
+
+run_ultimate_protein_tools('count_aa', '/content/testdata.fasta', 'MLK')
+{'crab_anapl': {'M': 5, 'L': 18, 'K': 10},
+ 'crab_bovin': {'M': 2, 'L': 15, 'K': 10},
+ 'crab_chick': {'M': 5, 'L': 18, 'K': 10},
+ 'crab_human': {'M': 2, 'L': 15, 'K': 10},
+ 'crab_mesau': {'M': 3, 'L': 14, 'K': 10},
+ 'crab_mouse': {'M': 2, 'L': 15, 'K': 10},
+ 'crab_rabit': {'M': 2, 'L': 15, 'K': 10},
+ 'crab_rat': {'M': 3, 'L': 14, 'K': 10},
+ 'crab_squac': {'M': 5, 'L': 13, 'K': 9}}
+
+run_ultimate_protein_tools('get_fracture_of_aa', 'NnnN')
+{'n': 0.5, 'N': 0.5}
+
+run_ultimate_protein_tools('calculate_protein_mass', 'NnnN')
+474.424
+
+run_ultimate_protein_tools('calculate_protein_mass', '/content/testdata.fasta')
+{'crab_anapl': 19936.699,
+ 'crab_bovin': 20036.552,
+ 'crab_chick': 20019.741,
+ 'crab_human': 20158.674,
+ 'crab_mesau': 20074.577,
+ 'crab_mouse': 20038.568,
+ 'crab_rabit': 20106.642,
+ 'crab_rat': 20088.604,
+ 'crab_squac': 20253.948}
+
+run_ultimate_protein_tools('get_atomic_mass', 'C2H5OH')
+46.06804
+
+run_ultimate_protein_tools('convert_aa_name', 'LTPSRIFDQIFGEHLQESELLP', use_default_register=False, sep='-')
+Leu-Thr-Pro-Ser-Arg-Ile-Phe-Asp-Gln-Ile-Phe-Gly-Glu-His-Leu-Gln-Glu-Ser-Glu-Leu-Leu-Pro
 ```
-
-### Troubleshooting
-
-TODO change this
-
-If the program doesn't work – try to scream like opossum.
 
 ### Contacts
 ![Wonderful Team](https://github.com/ArtemVaska/HW4_Functions2/blob/HW4_Vasilev/HW4_Voskoboinikov/Wonderful_team.jpg)
