@@ -14,16 +14,14 @@ AMINOACID_DICT = {
     'P': 'Proline', 'p': 'proline',
     'Q': 'Glutamine', 'q': 'glutamine',
     'R': 'Arginine', 'r': 'arginine',
-    'S': 'Serine',  's': 'serine',
+    'S': 'Serine', 's': 'serine',
     'T': 'Threonine', 't': 'threonine',
     'V': 'Valine', 'v': 'valine',
     'W': 'Tryptophan', 'w': 'tryptophan',
     'Y': 'Tyrosine', 'y': 'tyrosine'
-    }
-
+}
 
 H2O_WEIGHT: float = 18.01468
-
 
 AA_MASS_DICT: dict[str, float] = {
     'G': 75.0659, 'g': 75.0659,
@@ -46,8 +44,7 @@ AA_MASS_DICT: dict[str, float] = {
     'I': 131.17262, 'i': 131.17262,
     'M': 149.21094, 'm': 149.21094,
     'T': 119.11826, 't': 119.11826,
-    }
-
+}
 
 ATOMIC_MASS: dict[str, float] = {
     'C': 12.011,
@@ -55,8 +52,7 @@ ATOMIC_MASS: dict[str, float] = {
     'O': 15.999,
     'N': 14.0067,
     'S': 32.065
-    }
-
+}
 
 AA_NAME_DICT: dict[str, str] = {
     'G': 'Gly', 'g': 'Gly',
@@ -79,7 +75,7 @@ AA_NAME_DICT: dict[str, str] = {
     'I': 'Ile', 'i': 'Ile',
     'M': 'Met', 'm': 'Met',
     'T': 'Thr', 't': 'Thr'
-    }
+}
 
 
 RNA_AA_TABLE = {
@@ -87,7 +83,7 @@ RNA_AA_TABLE = {
     'L': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
     'S': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'],
     'Y': ['UAU', 'UAC'],
-    '*': ['uaa', 'uag', 'uga'],
+    '*': ['UAA', 'UAG', 'UGA', 'uaa', 'uag', 'uga'],
     'C': ['UGU', 'UGC'],
     'W': ['UGG'],
     'P': ['CCU', 'CCC', 'CCA', 'CCG'],
@@ -259,11 +255,11 @@ RNA_CODON_TABLE = {
  }
 
 
-def read_seq_from_fasta(path_to_seq: str, 
-                        use_full_name: bool = False, 
+def read_seq_from_fasta(path_to_seq: str,
+                        use_full_name: bool = False,
                         **_) -> dict:
     """
-    Reads sequences from fasta file and returns dictionary
+    Reads sequences from fasta file and returns dictionary.
 
     Arguments:
     - path_to_seq (str): path to file
@@ -276,19 +272,19 @@ def read_seq_from_fasta(path_to_seq: str,
         out_dct = {}
         for line in f:
             line = line.strip()
-            if line.startswith('>'): # check for first line in seq
-                if use_full_name: # check if user set full name in fasta
-                    name = line[1:] # take whole fasta properties (e.g. if names not unique)
+            if line.startswith('>'):  # check for first line in seq
+                if use_full_name:  # check if user set full name in fasta
+                    name = line[1:]  # take whole fasta properties (e.g. if names not unique)
                 else:
                     name = line[1:].split()[0]
             else:
-                out_dct[name] = out_dct.get(name, '') + line # get value from dict (return '' if empty) and append str
+                out_dct[name] = out_dct.get(name, '') + line  # get value from dict (return '' if empty) and append str
     return out_dct
 
 
 def get_sites_lengths(sites: list) -> dict:
     """
-    Takes sites list and calculates their lengths
+    Takes sites list and calculates their lengths.
 
     Arguments:
     - sites (list): list of sites (str)
@@ -305,7 +301,7 @@ def get_sites_lengths(sites: list) -> dict:
 
 def invert_dct(dct: dict) -> dict:
     """
-    Inverts a dict
+    Inverts a dict.
 
     Arguments:
     - dct (dict): dict to be inverted
@@ -316,13 +312,13 @@ def invert_dct(dct: dict) -> dict:
 
     inv_dct = {}
     for k, v in dct.items():
-        inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return [] if empty) and append key
+        inv_dct[v] = inv_dct.get(v, []) + [k]  # get value from dict (return [] if empty) and append key
     return inv_dct
 
 
 def is_protein_valid(seq: str) -> bool:
     """
-    Checks if protein is valid
+    Checks if protein is valid.
 
     Arguments:
     - seq (str): seq to be checked
@@ -336,12 +332,12 @@ def is_protein_valid(seq: str) -> bool:
     return False
 
 
-def find_sites(seq: str, 
-               *sites: str, 
-               is_one_based: bool = False, 
+def find_sites(seq: str,
+               *sites: str,
+               is_one_based: bool = False,
                **_) -> dict:
     """
-    Finds indexes of given sites
+    Finds indexes of given sites.
 
     Arguments:
     - seq (str): seq to be checked
@@ -352,17 +348,21 @@ def find_sites(seq: str,
     - dict: dictionary of sites as keys and lists of indexes for the site where it's been found
     """
 
-    window_sizes = invert_dct(get_sites_lengths(sites)) # get lengths of all sites and stick them together to avoid passing through seq multiple times if possible
-    found_sites = {} 
-    for window_size in window_sizes: # perform iteration for all given lengths of sites
-        for i in range(len(seq) - window_size + 1): # iterate through seq with step one and consider window of site length each step 
-            scatter = seq[i:i + window_size] # get fragment of sequence with length of window i.e. scatter
+    window_sizes = invert_dct(get_sites_lengths(
+        sites))  # get lengths of all sites and stick them together to avoid passing through seq multiple times if
+    # possible
+    found_sites = {}
+    for window_size in window_sizes:  # perform iteration for all given lengths of sites
+        for i in range(
+                len(seq) - window_size + 1):  # iterate through seq with step one and consider window
+            # of site length each step
+            scatter = seq[i:i + window_size]  # get fragment of sequence with length of window i.e. scatter
             for site in window_sizes[window_size]:
-                if scatter == site: # check if scatter is site
+                if scatter == site:  # check if scatter is site
                     found_sites[site] = (
-                        found_sites.get(site, []) # get 
-                        + [i + is_one_based]
-                        ) # append index to list in dict
+                            found_sites.get(site, [])  # get
+                            + [i + is_one_based]
+                    )  # append index to list in dict
     return found_sites
 
 
@@ -370,7 +370,10 @@ def get_protein_rnas(seq: str,
                      check_if_user_conscious: bool = False,
                      **_) -> list:
     """
-    Returns list of all possible RNA's from which can serve as matrix for protein synthesis. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
+    Returns list of all possible RNA's from which can serve as matrix for protein synthesis.
+
+    WARNING: can be computationally intensive on longer sequences,
+    will NOT start unless check_if_user_conscious is True!
 
     Arguments:
     - seq (str): seq to be checked
@@ -381,23 +384,23 @@ def get_protein_rnas(seq: str,
     """
 
     if check_if_user_conscious:
-        kmers = [''] # set initial kmers
-        for amino_acid in seq: # iterate AAs
+        kmers = ['']  # set initial kmers
+        for amino_acid in seq:  # iterate AAs
             current_kmers = []
-            codons = RNA_AA_TABLE[amino_acid] # get list of codons for AA
+            codons = RNA_AA_TABLE[amino_acid]  # get list of codons for AA
             for codon in codons:
                 for kmer in kmers:
-                    current_kmers.append(kmer + codon) # append every codon to existing kmers
-            kmers = current_kmers # re-write k-mers for next iteration
+                    current_kmers.append(kmer + codon)  # append every codon to existing kmers
+            kmers = current_kmers  # re-write k-mers for next iteration
 
         return kmers
 
-    return "You don't know what you're doing!" # politely ask user to reconsider their actions
+    return "You don't know what you're doing!"  # politely ask user to reconsider their actions
 
 
 def get_protein_rnas_number(seq: int) -> int:
     """
-    Get number of all possible RNA's for a given protein
+    Get number of all possible RNA's for a given protein.
 
     Arguments:
     - seq (str): seq to be checked
@@ -435,7 +438,10 @@ def get_frameshift_proteins(seq: int,
                             is_stop_codon_termination_enabled: bool = False,
                             **_) -> dict:
     """
-    Returns list of all possible proteins from all possible frames in peptide. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
+    Returns list of all possible proteins from all possible frames in peptide.
+
+    WARNING: can be computationally intensive on longer sequences,
+    will NOT start unless check_if_user_conscious is True!
     
     Arguments:
     - seq (str): seq to be checked
@@ -443,12 +449,13 @@ def get_frameshift_proteins(seq: int,
     - is_stop_codon_termination_enabled (bool): terminate translation when reached stop-codon. Default False.
 
     Return:
-    - dict: dict of lists of all possible frames proteins {frame_0: ['protein_seqs'], frame_1: ['protein_seqs'], frame_2:  ['protein_seqs']}
+    - dict: dict of lists of all possible frames proteins:
+    {frame_0: ['protein_seqs'], frame_1: ['protein_seqs'], frame_2: ['protein_seqs']}
     """
 
     if check_if_user_conscious:
-        frameshift_dct = {'frame_0': [seq]} # set current seq as frame_0 (protein from not-shifted frame)
-        rnas = get_protein_rnas(seq, check_if_user_conscious = check_if_user_conscious)
+        frameshift_dct = {'frame_0': [seq]}  # set current seq as frame_0 (protein from not-shifted frame)
+        rnas = get_protein_rnas(seq, check_if_user_conscious=check_if_user_conscious)
         for frame_number in [1, 2]:
             frames_list = []
             for rna in rnas:
@@ -458,12 +465,13 @@ def get_frameshift_proteins(seq: int,
                     if not check_all_upper(frame_codon): # check if all letters in codon uppercase
                         frame_codon = frame_codon.lower() # if not change all to lowercase
                     frame += RNA_CODON_TABLE[frame_codon]
-                    if is_stop_codon_termination_enabled and RNA_CODON_TABLE[frame_codon] == '*': # stop writing if meet stop-codon
+                    if is_stop_codon_termination_enabled and RNA_CODON_TABLE[
+                        frame_codon] == '*':  # stop writing if meet stop-codon
                         break
-                frames_list.append(frame) # append frame to frames list
-            frameshift_dct[f'frame_{frame_number}'] = list(set(frames_list)) # clean duplicates and write to dict
+                frames_list.append(frame)  # append frame to frames list
+            frameshift_dct[f'frame_{frame_number}'] = list(set(frames_list))  # clean duplicates and write to dict
         return frameshift_dct
-    return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
+    return "You don't fucking know what you're doing!"  # politely ask user to reconsider their actions
 
 
 def length_of_protein(seq: str) -> int:
@@ -534,7 +542,6 @@ def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids
 
 def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = None) -> float:
     """
-
     Calculates the molecular mass of a protein based on its amino acid sequence and a dictionary of amino acid masses.
 
     Arguments / Args:
@@ -561,7 +568,6 @@ def calculate_protein_mass(sequence: str, aa_atomic_mass: dict[str, float] = Non
 
 def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
     """
-
     Calculates the molecular mass of a biological molecule, primarily an amino acid, based on a simple chemical formula.
 
     Arguments / Args:
@@ -598,7 +604,6 @@ def get_atomic_mass(chem: str, atomic_mass: dict[str, float] = None) -> float:
 def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = '',
                     use_default_register: bool = True) -> str:
     """
-
     Converts a sequence of one-letter amino acid codes to three-letter designations.
 
     Arguments / Args:
@@ -613,7 +618,7 @@ def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = 
     Return:
     - str: A string of three-letter amino acid designations separated by the specified delimiter.
     """
-    
+
     new_name = ''
     if name_dict is None:
         name_dict = AA_NAME_DICT
@@ -640,16 +645,16 @@ def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = 
 
 COMMAND_DCT = {
     'find_sites': find_sites,
-    'get_protein_rnas' : get_protein_rnas,
+    'get_protein_rnas': get_protein_rnas,
     'get_protein_rnas_number': get_protein_rnas_number,
     'get_frameshift_proteins': get_frameshift_proteins,
     'is_protein_valid': is_protein_valid,
-    }
+}
 
 
 def parse_input(inp: str, **kwargs) -> dict:
     """
-    Parses input and returns dict of seqs
+    Parses input and returns dict of seqs.
 
     Arguments:
     - inp (str): Input path or seq or dict of seqs or list of seqs
@@ -658,6 +663,7 @@ def parse_input(inp: str, **kwargs) -> dict:
     Return:
     - parsed_dct (dict): dict where keys are number or name of seq and value of seq
     """
+
     parsed_dct = {}
     inp_type = type(inp) # get input type
     if inp_type == list:
@@ -669,10 +675,8 @@ def parse_input(inp: str, **kwargs) -> dict:
         parsed_dct = input_dct = read_seq_from_fasta(inp, **kwargs)
     elif inp_type == str:
         parsed_dct = {0: inp}
-    
+
     return parsed_dct
-
-
 
 
 def run_ultimate_protein_tools(command,
