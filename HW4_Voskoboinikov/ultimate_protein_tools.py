@@ -128,7 +128,19 @@ RNA_CODON_TABLE = {
 }
 
 
-def read_seq_from_fasta(path_to_seq: str, use_full_name=False, **kwargs):
+def read_seq_from_fasta(path_to_seq: str, 
+                        use_full_name: bool = False, 
+                        **kwargs) -> dict:
+    """
+    Reads sequences from fasta file and returns dictionary
+
+    Argument:
+    - path_to_seq (str): path to file
+
+    Return:
+    - dict: dict of sequences names as keys and sequences themselves as values {'seq_name': 'sequence',}
+    """
+    
     with open(path_to_seq) as f:
         out_dct = {}
         for line in f:
@@ -143,7 +155,17 @@ def read_seq_from_fasta(path_to_seq: str, use_full_name=False, **kwargs):
     return out_dct
 
 
-def get_sites_lengths(sites):
+def get_sites_lengths(sites: list) -> dict:
+    """
+    Takes sites list and calculates their lengths
+
+    Argument:
+    - sites (list): list of sites (str)
+
+    Return:
+    - dict: dict of sites length {'site': 'length',}
+    """
+
     sites_length_dct = {}
     for site in sites:
         sites_length_dct[site] = len(site)
