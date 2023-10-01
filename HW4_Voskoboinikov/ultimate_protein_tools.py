@@ -686,4 +686,6 @@ def run_ultimate_protein_tools(command,
             output_dct[name] = command_dct[command](input_dct[name], *args, **kwargs)
         else:
             print('Command invalid')
+    if len(output_dct) == 1:
+        return output_dct[list(output_dct.keys())[0]]
     return output_dct
