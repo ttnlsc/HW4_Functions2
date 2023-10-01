@@ -675,7 +675,7 @@ def run_ultimate_protein_tools(command,
     - output_dct (dict): dict where keys are number or name of seq and values are results of command run
     """
     output_dct = {}
-    input_dct = parse_input(inp)
+    input_dct = parse_input(inp, **kwargs)
     for name in input_dct:
         if command in command_dct and command != 'get_atomic_mass':
             if is_protein_valid(input_dct[name]):
