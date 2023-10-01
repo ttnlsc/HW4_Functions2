@@ -172,6 +172,22 @@ def find_sites(seq, *sites, is_one_based = False, **kwargs):
     return found_sites
 
 
+def get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = False):
+    if i_absolutely_fucking_know_what_im_doing:
+        kmers = [''] # set initial kmers
+        for amino_acid in seq: # iterate AAs
+            current_kmers = []
+            codons = RNA_AA_TABLE[amino_acid] # get list of codons for AA
+            for codon in codons:
+                for kmer in kmers:
+                    current_kmers.append(kmer + codon) # append every codon to existing kmers
+            kmers = current_kmers # re-write k-mers for next iteration
+
+        return kmers
+
+    return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
