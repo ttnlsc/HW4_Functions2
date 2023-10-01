@@ -77,7 +77,6 @@ AA_NAME_DICT: dict[str, str] = {
     'T': 'Thr', 't': 'Thr'
 }
 
-
 RNA_AA_TABLE = {
     'F': ['UUU', 'UUC'],
     'L': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
@@ -120,8 +119,7 @@ RNA_AA_TABLE = {
     'd': ['gau', 'gac'],
     'e': ['gaa', 'gag'],
     'g': ['ggu', 'ggc', 'gga', 'ggg']
- }
-
+}
 
 RNA_CODON_TABLE = {
     'UUU': 'F',
@@ -252,7 +250,7 @@ RNA_CODON_TABLE = {
     'ggc': 'g',
     'gga': 'g',
     'ggg': 'g'
- }
+}
 
 
 def read_seq_from_fasta(path_to_seq: str,
@@ -432,9 +430,8 @@ def check_all_upper(codon: str) -> bool:
     return check_upper
 
 
-
-def get_frameshift_proteins(seq: int, 
-                            check_if_user_conscious: bool = False, 
+def get_frameshift_proteins(seq: int,
+                            check_if_user_conscious: bool = False,
                             is_stop_codon_termination_enabled: bool = False,
                             **_) -> dict:
     """
@@ -460,10 +457,10 @@ def get_frameshift_proteins(seq: int,
             frames_list = []
             for rna in rnas:
                 frame = ''
-                for i in range(frame_number, len(rna) - (frame_number + 1), 3): # set frame-dependent range to iterate
-                    frame_codon = rna[i:i+3] # extract codon
-                    if not check_all_upper(frame_codon): # check if all letters in codon uppercase
-                        frame_codon = frame_codon.lower() # if not change all to lowercase
+                for i in range(frame_number, len(rna) - (frame_number + 1), 3):  # set frame-dependent range to iterate
+                    frame_codon = rna[i:i + 3]  # extract codon
+                    if not check_all_upper(frame_codon):  # check if all letters in codon uppercase
+                        frame_codon = frame_codon.lower()  # if not change all to lowercase
                     frame += RNA_CODON_TABLE[frame_codon]
                     if is_stop_codon_termination_enabled and RNA_CODON_TABLE[
                         frame_codon] == '*':  # stop writing if meet stop-codon
@@ -665,13 +662,13 @@ def parse_input(inp: str, **kwargs) -> dict:
     """
 
     parsed_dct = {}
-    inp_type = type(inp) # get input type
+    inp_type = type(inp)  # get input type
     if inp_type == list:
         for i, seq in enumerate(inp):
             parsed_dct |= {i: seq}
     elif inp_type == dict:
         parsed_dct = inp
-    elif inp_type == str and '.' in inp: # check whether input has file extension symbols
+    elif inp_type == str and '.' in inp:  # check whether input has file extension symbols
         parsed_dct = input_dct = read_seq_from_fasta(inp, **kwargs)
     elif inp_type == str:
         parsed_dct = {0: inp}
