@@ -263,7 +263,17 @@ def get_protein_rnas(seq: str,
     return "You don't know what you're doing!" # politely ask user to reconsider their actions
 
 
-def get_protein_rnas_number(seq):
+def get_protein_rnas_number(seq: int) -> int:
+    """
+    Get number of all possible RNA's for a given protein
+
+    Argument:
+    - seq (str): seq to be checked
+
+    Return:
+    - int: number of possible RNA's for seq
+    """
+
     rnas_num = 1
     for amino_acid in seq:
         rnas_num *= len(RNA_AA_TABLE[amino_acid])
