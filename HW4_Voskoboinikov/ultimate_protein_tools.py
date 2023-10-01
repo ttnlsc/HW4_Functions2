@@ -320,7 +320,7 @@ def get_frameshift_proteins(seq: int,
     return "You don't fucking know what you're doing!"  # politely ask user to reconsider their actions
 
 
-def length_of_protein(seq: str) -> int:
+def get_length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
 
@@ -380,7 +380,7 @@ def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids
         round_var = 4
     aa_dict_count = count_aa(seq, aminoacids=aminoacids)
     aa_dict_percent = {}
-    len_of_protein = length_of_protein(seq)
+    len_of_protein = get_length_of_protein(seq)
     for aa, count in aa_dict_count.items():
         aa_dict_percent[aa] = round(count / len_of_protein * mult, round_var)
     return aa_dict_percent
