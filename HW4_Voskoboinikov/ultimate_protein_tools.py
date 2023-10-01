@@ -653,7 +653,7 @@ def parse_input(inp: str, **kwargs) -> dict:
     elif inp_type == dict:
         parsed_dct = inp
     elif inp_type == str and '.' in inp:  # check whether input has file extension symbols
-        parsed_dct = input_dct = read_seq_from_fasta(inp, **kwargs)
+        parsed_dct = read_seq_from_fasta(inp, **kwargs)
     elif inp_type == str:
         parsed_dct = {0: inp}
 
