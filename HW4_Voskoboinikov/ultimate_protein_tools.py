@@ -182,7 +182,7 @@ def invert_dct(dct: dict) -> dict:
     Return:
     - dict: inverted dict
     """
-    
+
     inv_dct = {}
     for k, v in dct.items():
         inv_dct[v] = inv_dct.get(v, []) + [k] # get value from dict (return []) and append key
@@ -205,7 +205,22 @@ def is_protein_valid(seq: str) -> bool:
     return False
 
 
-def find_sites(seq, *sites, is_one_based = False, **kwargs):
+def find_sites(seq: str, 
+               *sites: str, 
+               is_one_based: bool = False, 
+               **kwargs) -> dict:
+    """
+    Finds indexes of given sites
+
+    Argument:
+    - seq (str): seq to be checked
+    - *args (str): sites to be found
+    - is_one_based (bool): whether result should be 0- (False) or 1-indexed (True). Default False
+
+    Return:
+    - dict: dictionary of sites as keys and lists of indexes for the site where it's been found
+    """
+
     window_sizes = invert_dct(get_sites_lengths(sites)) # get lengths of all sites and stick them together to avoid passing through seq multiple times if possible
     found_sites = {} 
     for window_size in window_sizes: # perform iteration for all given lengths of sites
