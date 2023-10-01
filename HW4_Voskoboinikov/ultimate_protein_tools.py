@@ -77,13 +77,13 @@ AA_NAME_DICT: dict[str, str] = {
     'T': 'Thr', 't': 'Thr'
 }
 
-# TODO check if possible to remove kwargs
+
 RNA_AA_TABLE = {
     'F': ['UUU', 'UUC'],
     'L': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
     'S': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'],
     'Y': ['UAU', 'UAC'],
-    '*': ['UAA', 'UAG', 'UGA'],
+    '*': ['UAA', 'UAG', 'UGA', 'uaa', 'uag', 'uga'],
     'C': ['UGU', 'UGC'],
     'W': ['UGG'],
     'P': ['CCU', 'CCC', 'CCA', 'CCG'],
@@ -100,26 +100,159 @@ RNA_AA_TABLE = {
     'D': ['GAU', 'GAC'],
     'E': ['GAA', 'GAG'],
     'G': ['GGU', 'GGC', 'GGA', 'GGG'],
-}
+    'f': ['uuu', 'uuc'],
+    'l': ['uua', 'uug', 'cuu', 'cuc', 'cua', 'cug'],
+    's': ['ucu', 'ucc', 'uca', 'ucg', 'agu', 'agc'],
+    'y': ['uau', 'uac'],
+    'c': ['ugu', 'ugc'],
+    'w': ['ugg'],
+    'p': ['ccu', 'ccc', 'cca', 'ccg'],
+    'h': ['cau', 'cac'],
+    'q': ['caa', 'cag'],
+    'r': ['cgu', 'cgc', 'cga', 'cgg', 'aga', 'agg'],
+    'i': ['auu', 'auc', 'aua'],
+    'm': ['aug'],
+    't': ['acu', 'acc', 'aca', 'acg'],
+    'n': ['aau', 'aac'],
+    'k': ['aaa', 'aag'],
+    'v': ['guu', 'guc', 'gua', 'gug'],
+    'a': ['gcu', 'gcc', 'gca', 'gcg'],
+    'd': ['gau', 'gac'],
+    'e': ['gaa', 'gag'],
+    'g': ['ggu', 'ggc', 'gga', 'ggg']
+ }
+
 
 RNA_CODON_TABLE = {
-    'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',
-    'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',
-    'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',
-    'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',
-    'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
-    'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
-    'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-    'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-    'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',
-    'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
-    'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
-    'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-    'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
-    'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-    'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
-    'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
-}
+    'UUU': 'F',
+    'UUC': 'F',
+    'UUA': 'L',
+    'UUG': 'L',
+    'UCU': 'S',
+    'UCC': 'S',
+    'UCA': 'S',
+    'UCG': 'S',
+    'UAU': 'Y',
+    'UAC': 'Y',
+    'UAA': '*',
+    'UAG': '*',
+    'UGU': 'C',
+    'UGC': 'C',
+    'UGA': '*',
+    'UGG': 'W',
+    'CUU': 'L',
+    'CUC': 'L',
+    'CUA': 'L',
+    'CUG': 'L',
+    'CCU': 'P',
+    'CCC': 'P',
+    'CCA': 'P',
+    'CCG': 'P',
+    'CAU': 'H',
+    'CAC': 'H',
+    'CAA': 'Q',
+    'CAG': 'Q',
+    'CGU': 'R',
+    'CGC': 'R',
+    'CGA': 'R',
+    'CGG': 'R',
+    'AUU': 'I',
+    'AUC': 'I',
+    'AUA': 'I',
+    'AUG': 'M',
+    'ACU': 'T',
+    'ACC': 'T',
+    'ACA': 'T',
+    'ACG': 'T',
+    'AAU': 'N',
+    'AAC': 'N',
+    'AAA': 'K',
+    'AAG': 'K',
+    'AGU': 'S',
+    'AGC': 'S',
+    'AGA': 'R',
+    'AGG': 'R',
+    'GUU': 'V',
+    'GUC': 'V',
+    'GUA': 'V',
+    'GUG': 'V',
+    'GCU': 'A',
+    'GCC': 'A',
+    'GCA': 'A',
+    'GCG': 'A',
+    'GAU': 'D',
+    'GAC': 'D',
+    'GAA': 'E',
+    'GAG': 'E',
+    'GGU': 'G',
+    'GGC': 'G',
+    'GGA': 'G',
+    'GGG': 'G',
+    'uuu': 'f',
+    'uuc': 'f',
+    'uua': 'l',
+    'uug': 'l',
+    'ucu': 's',
+    'ucc': 's',
+    'uca': 's',
+    'ucg': 's',
+    'uau': 'y',
+    'uac': 'y',
+    'uaa': '*',
+    'uag': '*',
+    'ugu': 'c',
+    'ugc': 'c',
+    'uga': '*',
+    'ugg': 'w',
+    'cuu': 'l',
+    'cuc': 'l',
+    'cua': 'l',
+    'cug': 'l',
+    'ccu': 'p',
+    'ccc': 'p',
+    'cca': 'p',
+    'ccg': 'p',
+    'cau': 'h',
+    'cac': 'h',
+    'caa': 'q',
+    'cag': 'q',
+    'cgu': 'r',
+    'cgc': 'r',
+    'cga': 'r',
+    'cgg': 'r',
+    'auu': 'i',
+    'auc': 'i',
+    'aua': 'i',
+    'aug': 'm',
+    'acu': 't',
+    'acc': 't',
+    'aca': 't',
+    'acg': 't',
+    'aau': 'n',
+    'aac': 'n',
+    'aaa': 'k',
+    'aag': 'k',
+    'agu': 's',
+    'agc': 's',
+    'aga': 'r',
+    'agg': 'r',
+    'guu': 'v',
+    'guc': 'v',
+    'gua': 'v',
+    'gug': 'v',
+    'gcu': 'a',
+    'gcc': 'a',
+    'gca': 'a',
+    'gcg': 'a',
+    'gau': 'd',
+    'gac': 'd',
+    'gaa': 'e',
+    'gag': 'e',
+    'ggu': 'g',
+    'ggc': 'g',
+    'gga': 'g',
+    'ggg': 'g'
+ }
 
 
 def read_seq_from_fasta(path_to_seq: str,
@@ -234,7 +367,8 @@ def find_sites(seq: str,
 
 
 def get_protein_rnas(seq: str,
-                     check_if_user_conscious: bool = False) -> list:
+                     check_if_user_conscious: bool = False,
+                     **_) -> list:
     """
     Returns list of all possible RNA's from which can serve as matrix for protein synthesis.
 
@@ -272,7 +406,7 @@ def get_protein_rnas_number(seq: int) -> int:
     - seq (str): seq to be checked
 
     Return:
-    - int: number of possible RNA's for seq
+    - rnas_num (int): number of possible RNA's for seq
     """
 
     rnas_num = 1
@@ -281,8 +415,26 @@ def get_protein_rnas_number(seq: int) -> int:
     return rnas_num
 
 
-def get_frameshift_proteins(seq: int,
-                            check_if_user_conscious: bool = False,
+def check_all_upper(codon: str) -> bool:
+    """
+    Checks whether all letters in colon are upper
+
+    Arguments:
+    - codon (str): codon to be checked
+
+    Return:
+    - check_upper (bool): if all letters are uppercase
+    """
+
+    check_upper = True
+    for letter in (set(codon)):
+        check_upper = letter.isupper() and check_upper
+    return check_upper
+
+
+
+def get_frameshift_proteins(seq: int, 
+                            check_if_user_conscious: bool = False, 
                             is_stop_codon_termination_enabled: bool = False,
                             **_) -> dict:
     """
@@ -308,8 +460,10 @@ def get_frameshift_proteins(seq: int,
             frames_list = []
             for rna in rnas:
                 frame = ''
-                for i in range(frame_number, len(rna) - (frame_number + 1), 3):  # set frame-dependent range to iterate
-                    frame_codon = rna[i:i + 3]  # extract codon
+                for i in range(frame_number, len(rna) - (frame_number + 1), 3): # set frame-dependent range to iterate
+                    frame_codon = rna[i:i+3] # extract codon
+                    if not check_all_upper(frame_codon): # check if all letters in codon uppercase
+                        frame_codon = frame_codon.lower() # if not change all to lowercase
                     frame += RNA_CODON_TABLE[frame_codon]
                     if is_stop_codon_termination_enabled and RNA_CODON_TABLE[
                         frame_codon] == '*':  # stop writing if meet stop-codon
@@ -511,13 +665,13 @@ def parse_input(inp: str, **kwargs) -> dict:
     """
 
     parsed_dct = {}
-    inp_type = type(inp)
+    inp_type = type(inp) # get input type
     if inp_type == list:
         for i, seq in enumerate(inp):
             parsed_dct |= {i: seq}
     elif inp_type == dict:
         parsed_dct = inp
-    elif inp_type == str and '.' in inp:
+    elif inp_type == str and '.' in inp: # check whether input has file extension symbols
         parsed_dct = input_dct = read_seq_from_fasta(inp, **kwargs)
     elif inp_type == str:
         parsed_dct = {0: inp}
