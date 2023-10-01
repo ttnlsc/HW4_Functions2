@@ -361,7 +361,7 @@ def count_aa(seq: str, *, aminoacids: str = None) -> dict:
 
 def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids: str = None) -> dict:
     """
-    Returns the fracture or percentage of amino acids in a protein sequence.
+    Calculates the fracture or percentage of amino acids in a protein sequence.
 
     Arguments:
     - seq (str): sequence in which you need to calculate the fracture of amino acids
