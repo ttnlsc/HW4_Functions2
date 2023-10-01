@@ -466,7 +466,7 @@ def get_frameshift_proteins(seq: int,
     return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
 
 
-def length_of_protein(seq: str) -> int:
+def length_of_protein(seq: str, **_) -> int:
     """
     Calculates the length of a protein.
 
@@ -480,7 +480,7 @@ def length_of_protein(seq: str) -> int:
     return len(seq)
 
 
-def count_aa(seq: str, *, aminoacids: str = None) -> dict:
+def count_aa(seq: str, aminoacids: str = None, **_) -> dict:
     """
     Counts the number of given or all amino acids in a protein sequence.
 
@@ -505,7 +505,7 @@ def count_aa(seq: str, *, aminoacids: str = None) -> dict:
     return aa_dict_count
 
 
-def get_fracture_of_aa(seq: str, *, show_as_percentage: bool = False, aminoacids: str = None) -> dict:
+def get_fracture_of_aa(seq: str, show_as_percentage: bool = False, aminoacids: str = None, **_) -> dict:
     """
     Returns the fracture or percentage of amino acids in a protein sequence.
 
@@ -637,13 +637,16 @@ def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = 
             raise ValueError(f'Unknown amino acid: {aa}')
     return new_name
 
-
-COMMAND_DCT = {
+# defined later to let all funcs be initialized before passed here
+command_dct = {
     'find_sites': find_sites,
     'get_protein_rnas' : get_protein_rnas,
     'get_protein_rnas_number': get_protein_rnas_number,
     'get_frameshift_proteins': get_frameshift_proteins,
     'is_protein_valid': is_protein_valid,
+    'length_of_protein': length_of_protein,
+    'count_aa': count_aa,
+    'get_fracture_of_aa': get_fracture_of_aa,
     }
 
 
@@ -683,7 +686,7 @@ def run_ultimate_protein_tools(command,
     input_dct = parse_input(inp)
     for name in input_dct:
         if is_protein_valid(input_dct[name]):
-            output_dct[name] = COMMAND_DCT[command](input_dct[name], *args, **kwargs)
+            output_dct[name] = command_dct[command](input_dct[name], *args, **kwargs)
         else:
             output_dct[name] = is_protein_valid(input_dct[name])
     return output_dct
