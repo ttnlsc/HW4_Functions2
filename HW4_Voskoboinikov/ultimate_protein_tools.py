@@ -201,6 +201,25 @@ def get_protein_rnas_number(seq):
     return rnas_num
 
 
+def get_frameshift_proteins(seq, i_absolutely_fucking_know_what_im_doing = False, is_stop_codon_termination_enabled=False):
+    if i_absolutely_fucking_know_what_im_doing:
+        frameshift_dct = {'frame_0': [seq]} # set current seq as frame_0 (protein from not-shifted frame)
+        rnas = get_protein_rnas(seq, i_absolutely_fucking_know_what_im_doing = i_absolutely_fucking_know_what_im_doing)
+        for frame_number in [1, 2]:
+            frames_list = []
+            for rna in rnas:
+                frame = ''
+                for i in range(frame_number, len(rna) - (frame_number + 1), 3): # set frame-dependent range to iterate
+                    frame_codon = rna[i:i+3] # extract codon
+                    frame += RNA_CODON_TABLE[frame_codon]
+                    if is_stop_codon_termination_enabled and RNA_CODON_TABLE[frame_codon] == '*': # stop writing if meet stop-codon
+                        break
+                frames_list.append(frame) # append frame to frames list
+            frameshift_dct[f'frame_{frame_number}'] = list(set(frames_list)) # clean duplicates and write to dict
+        return frameshift_dct
+    return "You don't fucking know what you're doing!" # politely ask user to reconsider their actions
+
+
 def length_of_protein(seq: str) -> int:
     """
     Calculates the length of a protein.
