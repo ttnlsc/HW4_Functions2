@@ -399,3 +399,27 @@ COMMAND_DCT = {
     'get_frameshift_proteins': get_frameshift_proteins,
     'is_protein_valid': is_protein_valid,
     }
+
+
+def run_ultimate_protein_tools(command,
+                               *args,
+                               input_path = None,
+                               input_seq = None,
+                               input_lst = None,
+                               input_dct = None,
+                               **kwargs):
+    output_dct = {}
+    if input_path:
+        input_dct = read_seq_from_fasta(input_path, **kwargs)
+    elif input_seq: # TODO possible name parsing
+        input_dct= {0: input_seq}
+    elif input_lst:
+        input_dct = {}
+        for i, seq in enumerate(input_lst):
+            input_dct |= {i: seq}
+    for name in input_dct:
+        if is_protein_valid(input_dct[name]):
+            output_dct[name] = COMMAND_DCT[command](input_dct[name], *args, **kwargs)
+        else:
+            output_dct[name] = is_protein_valid(input_dct[name])
+    return output_dct
