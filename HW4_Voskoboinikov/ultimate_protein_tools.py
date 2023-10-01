@@ -390,3 +390,12 @@ def convert_aa_name(sequence: str, name_dict: dict[str, str] = None, sep: str = 
         else:
             raise ValueError(f'Unknown amino acid: {aa}')
     return new_name
+
+
+COMMAND_DCT = {
+    'find_sites': find_sites,
+    'get_protein_rnas' : get_protein_rnas,
+    'get_protein_rnas_number': get_protein_rnas_number,
+    'get_frameshift_proteins': get_frameshift_proteins,
+    'is_protein_valid': is_protein_valid,
+    }
