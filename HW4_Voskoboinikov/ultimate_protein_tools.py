@@ -157,6 +157,12 @@ def invert_dct(dct):
     return inv_dct
 
 
+def is_protein_valid(seq):
+    if set(seq).issubset(RNA_AA_TABLE):
+        return True
+    return False
+
+
 def find_sites(seq, *sites, is_one_based = False, **kwargs):
     window_sizes = invert_dct(get_sites_lengths(sites)) # get lengths of all sites and stick them together to avoid passing through seq multiple times if possible
     found_sites = {} 
