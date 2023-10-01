@@ -134,7 +134,7 @@ def read_seq_from_fasta(path_to_seq: str,
     """
     Reads sequences from fasta file and returns dictionary
 
-    Argument:
+    Arguments:
     - path_to_seq (str): path to file
 
     Return:
@@ -159,7 +159,7 @@ def get_sites_lengths(sites: list) -> dict:
     """
     Takes sites list and calculates their lengths
 
-    Argument:
+    Arguments:
     - sites (list): list of sites (str)
 
     Return:
@@ -176,7 +176,7 @@ def invert_dct(dct: dict) -> dict:
     """
     Inverts a dict
 
-    Argument:
+    Arguments:
     - dct (dict): dict to be inverted
 
     Return:
@@ -193,7 +193,7 @@ def is_protein_valid(seq: str) -> bool:
     """
     Checks if protein is valid
 
-    Argument:
+    Arguments:
     - seq (str): seq to be checked
 
     Return:
@@ -212,7 +212,7 @@ def find_sites(seq: str,
     """
     Finds indexes of given sites
 
-    Argument:
+    Arguments:
     - seq (str): seq to be checked
     - *args (str): sites to be found
     - is_one_based (bool): whether result should be 0- (False) or 1-indexed (True). Default False
@@ -240,7 +240,7 @@ def get_protein_rnas(seq: str,
     """
     Returns list of all possible RNA's from which can serve as matrix for protein synthesis. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
 
-    Argument:
+    Arguments:
     - seq (str): seq to be checked
     - check_if_user_conscious (bool): checks user's consciousness. Default False
 
@@ -267,7 +267,7 @@ def get_protein_rnas_number(seq: int) -> int:
     """
     Get number of all possible RNA's for a given protein
 
-    Argument:
+    Arguments:
     - seq (str): seq to be checked
 
     Return:
@@ -280,7 +280,21 @@ def get_protein_rnas_number(seq: int) -> int:
     return rnas_num
 
 
-def get_frameshift_proteins(seq, check_if_user_conscious = False, is_stop_codon_termination_enabled=False):
+def get_frameshift_proteins(seq: int, 
+                            check_if_user_conscious: bool = False, 
+                            is_stop_codon_termination_enabled: bool = False) -> dict:
+    """
+    Returns list of all possible proteins from all possible frames in peptide. WARNING: can be computationally intence on longer sequences, will NOT start unless check_if_user_conscious is True
+    
+    Arguments:
+    - seq (str): seq to be checked
+    - check_if_user_conscious (bool): checks user's consciousness. Default False
+    - is_stop_codon_termination_enabled (bool): terminate translation when reached stop-codon. Default False.
+
+    Return:
+    - dict: dict of lists of all possible frames proteins {frame_0: ['protein_seqs'], frame_1: ['protein_seqs'], frame_2:  ['protein_seqs']}
+    """
+
     if check_if_user_conscious:
         frameshift_dct = {'frame_0': [seq]} # set current seq as frame_0 (protein from not-shifted frame)
         rnas = get_protein_rnas(seq, check_if_user_conscious = check_if_user_conscious)
