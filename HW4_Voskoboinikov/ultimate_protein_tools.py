@@ -373,7 +373,7 @@ def get_protein_rnas(seq: str,
     return "You don't know what you're doing!"  # politely ask user to reconsider their actions
 
 
-def get_protein_rnas_number(seq: int) -> int:
+def get_protein_rnas_number(seq: int, **_) -> int:
     """
     Get number of all possible RNA's for a given protein.
 
